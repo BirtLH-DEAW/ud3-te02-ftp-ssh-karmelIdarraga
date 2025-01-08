@@ -37,7 +37,7 @@ RUN mv /indexPrimero.html /var/www/html/sitioprimero/index.html && \
     mv /sitioPrimero.key /etc/ssl/private/sitioprimero.key && \
     mv /SitioPrimero.cer /etc/ssl/certs/sitioprimero.cer && \
     mv /sshd_config /etc/ssh/sshd_config && \
-    mv id_rsa_egoitz /etc/id_rsa && \
+    mv id_rsa /etc/id_rsa && \
     mv id_kidarraga /etc/id_kidarraga
 
 # Habilitamos los sitios y el módulo SSL

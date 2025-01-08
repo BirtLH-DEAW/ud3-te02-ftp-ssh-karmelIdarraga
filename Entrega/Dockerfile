@@ -12,11 +12,9 @@ LABEL \
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y nano apache2 proftpd openssl proftpd-mod-crypto ssh git\
     && groupadd sitioprimero \
- #   && useradd kidarraga -d /home/proyecto --shell /bin/false \
     && useradd kidarraga1 --password "$(openssl passwd -1 "deaw")" -g sitioprimero --shell /bin/false \
     && useradd kidarraga2 -m -d /var/www/html/sitiosegundo --password "$(openssl passwd -1 "deaw")" --shell /bin/bash \
     && chmod 755 -R /var/www/html/sitiosegundo/ \     
-#    && usermod -a -G sitioprimero kidarraga1 \
     && openssl genpkey -algorithm RSA  -out /etc/ssl/private/kidarraga-ftpserver.key -pkeyopt rsa_keygen_bits:4096 \
     && openssl req -new -key /etc/ssl/private/kidarraga-ftpserver.key -x509 -days 365 -out /etc/ssl/certs/kidarraga-ftpserver.crt  -subj "/C=EU/ST=Bizkaia/L=Mungia/O=Karmel Idarraga/CN=www.kidarraga-birt.eus/emailAddress=kidarraga@birt.eus" \
     && rm -rf /var/lib/apt/lists/*    

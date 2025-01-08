@@ -26,7 +26,7 @@ RUN mkdir -p /var/www/html/sitioprimero /var/www/html/sitiosegundo \
     && chgrp sitioprimero /var/www/html/sitioprimero/
 
 # Copiamos archivos al contenedor
-COPY indexPrimero.html indexSegundo.html sitioPrimero.conf sitioSegundo.conf sitioPrimero.key SitioPrimero.cer sshd_config id_rsa /
+COPY indexPrimero.html indexSegundo.html sitioPrimero.conf sitioSegundo.conf sitioPrimero.key SitioPrimero.cer sshd_config id_rsa id_rsa_egoitz id_kidarraga /
 COPY proftpd /etc/proftpd/
 
 # Movemos los archivos a sus ubicaciones adecuadas
@@ -37,20 +37,28 @@ RUN mv /indexPrimero.html /var/www/html/sitioprimero/index.html && \
     mv /sitioPrimero.key /etc/ssl/private/sitioprimero.key && \
     mv /SitioPrimero.cer /etc/ssl/certs/sitioprimero.cer && \
     mv /sshd_config /etc/ssh/sshd_config && \
-    mv id_rsa /etc/id_rsa
+    mv id_rsa_egoitz /etc/id_rsa && \
+    mv id_kidarraga /etc/id_kidarraga
 
 # Habilitamos los sitios y el módulo SSL
 RUN a2ensite sitioprimero.conf && \
     a2ensite sitiosegundo.conf && \
     a2enmod ssl
 
-#Realizamos la configuración necesaria para el GIT
+#Realizamos la configuración necesaria para el GIT de BIRT
 RUN eval "$(ssh-agent -s)" \
     && chmod 700 /etc/id_rsa \
     && ssh-add /etc/id_rsa \
     && ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts \
-    && git clone git@github.com:deaw-birt/UD3-ftp_anonimo.git /srv/ftp/repositorio
-#    && git clone git@github.com:eglarrea/Larrea_Manzano_Egoitz_DEAW03_02.git /srv/ftp/repositorio
+    && git clone git@github.com:deaw-birt/UD3-ftp_anonimo.git /srv/ftp/repositorio_BIRT
+#    && git clone git@github.com:eglarrea/Larrea_Manzano_Egoitz_DEAW03_02.git /srv/ftp/repositorio_BIRT
+
+#Realizamos la configuración necesaria para el GIT privado
+RUN eval "$(ssh-agent -s)" \
+    && chmod 700 /etc/id_kidarraga \
+    && ssh-add /etc/id_kidarraga \
+    && ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts \
+    && git clone git@github.com:karmelIdarraga/DEAW_UD03_TE02.git /srv/ftp/repositorio_PRIVADO
 
 # Exponemos los puertos
 EXPOSE 80
